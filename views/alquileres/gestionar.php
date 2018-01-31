@@ -37,6 +37,32 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
 
+        <h3>Alquileres pendientes</h3>
+
+        <table class="table table-striped">
+            <thead>
+                <th>Codigo</th>
+                <th>Titulo</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr>
+                    <?php foreach ($alquileresPendientes as $alquiler): ?>
+                        <td><?= Html::encode($alquiler->pelicula->codigo) ?></td>
+                        <td><?= Html::encode($alquiler->pelicula->titulo) ?></td>
+                        <td><?= Html::encode($alquiler->pelicula->titulo) ?></td>
+                        <td>
+                            <?= Html::beginForm(['alquileres/devolver']) ?>
+                                <?= Html::hiddenInput('alquiler', $alquiler->id) ?>
+                                <?= Html::submitButton('Devolver', ['class' => 'btn btn-xs btn-danger']) ?>
+                            <?= Html::endForm() ?>
+                        </td>
+                    <?php endforeach ?>
+                </tr>
+            </tbody>
+
+        </table>
+
     <?php endif ?>
 
 </div>
