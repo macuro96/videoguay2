@@ -4,6 +4,9 @@ namespace app\controllers;
 
 use app\models\Alquileres;
 use app\models\AlquileresSearch;
+use app\models\GestionarSocioForm;
+use app\models\Peliculas;
+use app\models\Socios;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -141,5 +144,34 @@ class AlquileresController extends Controller
         return $this->redirect(
             Yii::$app->request->referrer ?: Yii::$app->homeUrl
         );
+    }
+
+    public function actionGestionar($numero = null, $codigo = null)
+    {
+        $data = [];
+
+        $alquileresPendientes = null;
+
+        $gestionarSocioForm = new GestionarSocioForm([
+            'numero' => $numero,
+        ]);
+
+        $data['gestionarSocioForm'] = $gestionarSocioForm;
+
+        if ($numero !== null && $gestionarSocioForm->validate()) {
+            $data['socio'] = Socios::findOne(['numero' => $numero]);
+            //$modelPelicula = Peliculas::findOne($codigo);
+
+            $alquileresPendientes = Alquileres::find()
+                                              ->with('pelicula')
+                                              ->where(['devolucion' => null])
+                                              ->andWhere(['socio_id' => $data['socio']->id])
+                                              ->orderBy('created_at DESC')
+                                              ->all();
+
+            $data['alquileresPendientes'] = $alquileresPendientes;
+        }
+
+        return $this->render('gestionar', $data);
     }
 }
