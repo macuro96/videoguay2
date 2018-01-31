@@ -37,6 +37,24 @@ class Alquileres extends \yii\db\ActiveRecord
             [['socio_id', 'pelicula_id', 'created_at'], 'unique', 'targetAttribute' => ['socio_id', 'pelicula_id', 'created_at']],
             [['pelicula_id'], 'exist', 'skipOnError' => true, 'targetClass' => Peliculas::className(), 'targetAttribute' => ['pelicula_id' => 'id']],
             [['socio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Socios::className(), 'targetAttribute' => ['socio_id' => 'id']],
+            [['pelicula_id'], function ($attribute, $params, $validator) {
+                $pelicula = Peliculas::findOne($this->pelicula_id);
+
+                if ($pelicula->estaAlquilada) {
+                    $this->addError($attribute, 'La película "' . $pelicula->titulo . '" ya está alquilada');
+                }
+            }, 'when' => function ($model, $attribute) {
+                return $model->id === null;
+            }],
+            [['pelicula_id'], function ($attribute, $params, $validator) {
+                $pelicula = Peliculas::findOne($this->pelicula_id);
+
+                if (!$pelicula->estaAlquilada) {
+                    $this->addError($attribute, 'La película "' . $pelicula->titulo . '" no está alquilada');
+                }
+            }, 'when' => function ($model, $attribute) {
+                return $model->id !== null;
+            }],
         ];
     }
 
@@ -70,7 +88,7 @@ class Alquileres extends \yii\db\ActiveRecord
         return $this->hasOne(Socios::className(), ['id' => 'socio_id'])->inverseOf('alquileres');
     }
 
-    public function estaPendiente()
+    public function getEstaPendiente()
     {
         return $this->devolucion === null;
     }

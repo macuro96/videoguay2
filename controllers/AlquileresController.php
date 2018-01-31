@@ -2,12 +2,12 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Alquileres;
 use app\models\AlquileresSearch;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * AlquileresController implements the CRUD actions for Alquileres model.
@@ -46,7 +46,7 @@ class AlquileresController extends Controller
 
     /**
      * Displays a single Alquileres model.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -78,7 +78,7 @@ class AlquileresController extends Controller
     /**
      * Updates an existing Alquileres model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -98,7 +98,7 @@ class AlquileresController extends Controller
     /**
      * Deletes an existing Alquileres model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -112,7 +112,7 @@ class AlquileresController extends Controller
     /**
      * Finds the Alquileres model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param int $id
      * @return Alquileres the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -122,6 +122,24 @@ class AlquileresController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('El alquiler no existe.');
+    }
+
+    public function actionDevolver()
+    {
+        $id = Yii::$app->request->post('alquiler');
+
+        if ($id === null) {
+            throw new NotFoundHttpException('Falta el alquiler');
+        }
+
+        $alquiler = $this->findModel($id);
+
+        $alquiler->devolucion = date('Y-m-d H:i:s');
+        $alquiler->save();
+
+        return $this->redirect(
+            Yii::$app->request->referrer ?: Yii::$app->homeUrl
+        );
     }
 }

@@ -64,4 +64,13 @@ class Peliculas extends \yii\db\ActiveRecord
         return $this->hasMany(Socios::className(), ['id' => 'socio_id'])
         ->via('alquileres');
     }
+
+    /**
+     * Devuelve si una pelicula esta alquilada.
+     * @return bool Si esta alquilada o no
+     */
+    public function getEstaAlquilada()
+    {
+        return $this->getAlquileres()->where(['devolucion' => null])->exists();
+    }
 }

@@ -118,11 +118,6 @@ class SociosController extends Controller
         return $this->redirect(['index']);
     }
 
-
-    public function actionDevolver()
-    {
-    }
-
     /**
      * Finds the Socios model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
