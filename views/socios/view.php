@@ -44,6 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <th>Código</th>
             <th>Título</th>
             <th>Fecha de alquiler</th>
+            <th>Acciones</th>
         </thead>
 
         <tbody>
@@ -52,6 +53,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     <td><?= Html::encode($alquiler->pelicula->codigo) ?></td>
                     <td><?= Html::encode($alquiler->pelicula->titulo) ?></td>
                     <td><?= Html::encode($alquiler->created_at) ?></td>
+                    <td>
+                        <?php if ($alquiler->estaPendiente()): ?>
+                            Está alquilada
+                        <?php endif ?>
+                    </td>
                 </tr>
             <?php endforeach ?>
         </tbody>

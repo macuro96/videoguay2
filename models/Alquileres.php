@@ -69,4 +69,9 @@ class Alquileres extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Socios::className(), ['id' => 'socio_id'])->inverseOf('alquileres');
     }
+
+    public function estaPendiente()
+    {
+        return $this->devolucion === null;
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Alquileres;
 use app\models\Socios;
 use app\models\SociosSearch;
 use Yii;
@@ -52,8 +53,12 @@ class SociosController extends Controller
      */
     public function actionView($id)
     {
-        $socio = $this->findModel($id);
-        $alquileresSocio = $socio->alquileres;
+        $alquileresSocio = Alquileres::find()
+                                     ->with('pelicula')
+                                     ->where(['socio_id' => $id])
+                                     ->orderBy('created_at DESC')
+                                     ->limit(10)
+                                     ->all();
 
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -111,6 +116,11 @@ class SociosController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+
+    public function actionDevolver()
+    {
     }
 
     /**
