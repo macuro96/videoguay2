@@ -35,4 +35,27 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
+    <h3>Historial de películas alquiladas</h3>
+    <?php if ($alquileresSocio == null): ?>
+        <h5>No hay películas alquiladas</h5>
+    <?php endif ?>
+    <table class="table table-striped">
+        <thead>
+            <th>Código</th>
+            <th>Título</th>
+            <th>Fecha de alquiler</th>
+        </thead>
+
+        <tbody>
+            <?php foreach ($alquileresSocio as $alquiler): ?>
+                <tr>
+                    <td><?= Html::encode($alquiler->pelicula->codigo) ?></td>
+                    <td><?= Html::encode($alquiler->pelicula->titulo) ?></td>
+                    <td><?= Html::encode($alquiler->created_at) ?></td>
+                </tr>
+            <?php endforeach ?>
+        </tbody>
+
+    </table>
+
 </div>

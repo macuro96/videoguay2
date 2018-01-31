@@ -2,12 +2,12 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Socios;
 use app\models\SociosSearch;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * SociosController implements the CRUD actions for Socios model.
@@ -46,14 +46,18 @@ class SociosController extends Controller
 
     /**
      * Displays a single Socios model.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
+        $socio = $this->findModel($id);
+        $alquileresSocio = $socio->alquileres;
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'alquileresSocio' => $alquileresSocio,
         ]);
     }
 
@@ -78,7 +82,7 @@ class SociosController extends Controller
     /**
      * Updates an existing Socios model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -98,7 +102,7 @@ class SociosController extends Controller
     /**
      * Deletes an existing Socios model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -112,7 +116,7 @@ class SociosController extends Controller
     /**
      * Finds the Socios model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param int $id
      * @return Socios the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
