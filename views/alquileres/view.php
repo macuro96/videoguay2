@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Alquileres */
 
-$this->title = $model->id;
+$this->title = 'Alquiler de la pelicula "'.$model->pelicula->titulo.'"';
 $this->params['breadcrumbs'][] = ['label' => 'Alquileres', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -28,9 +28,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'socio_id',
-            'pelicula_id',
+            'socio.nombre',
+            'pelicula.titulo',
             'created_at',
             'devolucion',
         ],

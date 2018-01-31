@@ -43,10 +43,10 @@ class Socios extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'numero' => 'Numero',
+            'numero' => 'Número',
             'nombre' => 'Nombre',
-            'direccion' => 'Direccion',
-            'telefono' => 'Telefono',
+            'direccion' => 'Dirección',
+            'telefono' => 'Teléfono',
         ];
     }
 
