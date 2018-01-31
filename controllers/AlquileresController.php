@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Alquileres;
 use app\models\AlquileresSearch;
+use app\models\GestionarPeliculaForm;
 use app\models\GestionarSocioForm;
 use app\models\Peliculas;
 use app\models\Socios;
@@ -146,6 +147,39 @@ class AlquileresController extends Controller
         );
     }
 
+    public function actionAlquilar()
+    {
+        $numero = Yii::$app->request->post('numero');
+        $codigo = Yii::$app->request->post('codigo');
+
+        if ($codigo === null) {
+            throw new NotFoundHttpException('Falta la película');
+        }
+
+        $socio = Socios::findOne(['numero' => $numero]);
+
+        if ($socio === null) {
+            throw new NotFoundHttpException('No existe el socio');
+        }
+
+        $pelicula = Peliculas::findOne(['codigo' => $codigo]);
+
+        if ($pelicula === null) {
+            throw new NotFoundHttpException('No existe el pelicula');
+        }
+
+        $alquiler = new Alquileres([
+            'socio_id' => $socio->id,
+            'pelicula_id' => $pelicula->id,
+        ]);
+
+        $alquiler->save();
+
+        return $this->redirect(
+            Yii::$app->request->referrer ?: Yii::$app->homeUrl
+        );
+    }
+
     public function actionGestionar($numero = null, $codigo = null)
     {
         $data = [];
@@ -156,11 +190,15 @@ class AlquileresController extends Controller
             'numero' => $numero,
         ]);
 
+        $gestionarPeliculaForm = new GestionarPeliculaForm([
+            'codigo' => $codigo,
+        ]);
+
         $data['gestionarSocioForm'] = $gestionarSocioForm;
+        $data['gestionarPeliculaForm'] = $gestionarPeliculaForm;
 
         if ($numero !== null && $gestionarSocioForm->validate()) {
             $data['socio'] = Socios::findOne(['numero' => $numero]);
-            //$modelPelicula = Peliculas::findOne($codigo);
 
             $alquileresPendientes = Alquileres::find()
                                               ->with('pelicula')
@@ -170,6 +208,22 @@ class AlquileresController extends Controller
                                               ->all();
 
             $data['alquileresPendientes'] = $alquileresPendientes;
+        }
+
+        if ($codigo !== null && $gestionarPeliculaForm->validate()) {
+            $data['pelicula'] = Peliculas::findOne(['codigo' => $codigo]);
+
+            $alquiler = new Alquileres([
+                'socio_id' => $data['socio']->id,
+                'pelicula_id' => $data['pelicula']->id,
+            ]);
+
+            // Poner regla de validacion en modelo de gestionarPeliculaForm
+            /*
+            if (!$alquiler->validate()) {
+                $gestionarPeliculaForm->addError()
+            }
+            */
         }
 
         return $this->render('gestionar', $data);

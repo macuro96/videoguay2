@@ -15,11 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?php $form = ActiveForm::begin([
+    <?php $formSocio = ActiveForm::begin([
         'method' => 'get',
         'action' => ['alquileres/gestionar']
     ]); ?>
-        <?= $form->field($gestionarSocioForm, 'numero')->textInput() ?>
+        <?= $formSocio->field($gestionarSocioForm, 'numero')->textInput() ?>
 
         <div class="form-group">
             <?= Html::submitButton('Buscar', ['class' => 'btn btn-success']) ?>
@@ -38,7 +38,9 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
 
         <h3>Alquileres pendientes</h3>
-
+        <?php if ($alquileresPendientes == null): ?>
+            <h5>No hay alquileres pendietes</h5>
+        <?php endif ?>
         <table class="table table-striped">
             <thead>
                 <th>Codigo</th>
@@ -62,6 +64,43 @@ $this->params['breadcrumbs'][] = $this->title;
             </tbody>
 
         </table>
+
+        <h3>Alquilar una película</h3>
+
+        <?php $formPelicula = ActiveForm::begin([
+            'method' => 'get',
+            'action' => ['alquileres/gestionar']
+        ]); ?>
+            <?= Html::hiddenInput('numero', $socio->numero) ?>
+            <?= $formPelicula->field($gestionarPeliculaForm, 'codigo')->textInput() ?>
+
+            <div class="form-group">
+                <?= Html::submitButton('Buscar', ['class' => 'btn btn-primary']) ?>
+            </div>
+
+        <?php ActiveForm::end(); ?>
+
+        <?php if (isset($pelicula)): ?>
+            <?= DetailView::widget([
+                'model' => $pelicula,
+                'attributes' => [
+                    'codigo',
+                    'titulo',
+                    'precio_alq',
+                ],
+            ]) ?>
+            <?php $formAlquilar = ActiveForm::begin([
+                'action' => ['alquileres/alquilar']
+            ]); ?>
+                <?= Html::hiddenInput('codigo', $pelicula->codigo) ?>
+                <?= Html::hiddenInput('numero', $socio->numero) ?>
+                <div class="form-group">
+                    <?= Html::submitButton('Alquilar', ['class' => 'btn btn-success']) ?>
+                </div>
+
+            <?php ActiveForm::end(); ?>
+
+        <?php endif ?>
 
     <?php endif ?>
 
