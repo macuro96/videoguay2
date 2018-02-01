@@ -34,7 +34,7 @@ class GestionarSocioForm extends Model
     public function attributeLabels()
     {
         return [
-            'numero' => 'Numero de socio',
+            'numero' => 'Socio',
         ];
     }
 
@@ -45,7 +45,16 @@ class GestionarSocioForm extends Model
     {
         return [
             [['numero'], 'required'],
-            [['numero'], 'number'],
+            [['numero'], function ($attribute, $params, $validator) {
+                if (!ctype_digit($this->numero)) {
+                    $nombre = $this->numero;
+                    $numero = Socios::find(['nombre' => $nombre])
+                                    ->select('numero')
+                                    ->column();
+
+                    return $numero;
+                }
+            }],
             [
                 ['numero'],
                 'exist',

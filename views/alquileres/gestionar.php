@@ -95,7 +95,7 @@ $this->params['breadcrumbs'][] = 'Gestionar';
                 'attributes' => [
                     'codigo',
                     'titulo',
-                    'precio_alq',
+                    'precio_alq:currency',
                 ],
             ]) ?>
 

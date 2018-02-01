@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'codigo',
             'titulo',
-            'precio_alq',
+            'precio_alq:currency',
         ],
     ]) ?>
 
