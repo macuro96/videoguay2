@@ -173,16 +173,16 @@ class AlquileresController extends Controller
             'pelicula_id' => $pelicula->id,
         ]);
 
-        $alquiler->save();
+        if (!$alquiler->save()) {
+            throw new NotFoundHttpException('Alquiler inválido');
+        }
 
-        return $this->redirect(
-            Yii::$app->request->referrer ?: Yii::$app->homeUrl
-        );
+        return $this->redirect(['gestionar', 'numero' => $numero]);
     }
 
     public function actionGestionar($numero = null, $codigo = null)
     {
-        $data = [];
+        $data = ['errorPelicula' => false];
 
         $alquileresPendientes = null;
 
@@ -218,12 +218,11 @@ class AlquileresController extends Controller
                 'pelicula_id' => $data['pelicula']->id,
             ]);
 
-            // Poner regla de validacion en modelo de gestionarPeliculaForm
-            /*
             if (!$alquiler->validate()) {
-                $gestionarPeliculaForm->addError()
+                $error = $alquiler->getErrors('pelicula_id')[0];
+                $gestionarPeliculaForm->addError('codigo', $error);
+                $data['errorPelicula'] = true;
             }
-            */
         }
 
         return $this->render('gestionar', $data);

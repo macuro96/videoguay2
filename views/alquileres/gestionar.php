@@ -8,8 +8,8 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Alquileres */
 
 $this->title = 'Gestionar alquileres';
-$this->params['breadcrumbs'][] = ['label' => 'Gestionar', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => 'Alquileres', 'url' => ['index']];
+$this->params['breadcrumbs'][] = 'Gestionar';
 ?>
 <div class="gestionar-view">
 
@@ -48,19 +48,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 <th></th>
             </thead>
             <tbody>
-                <tr>
-                    <?php foreach ($alquileresPendientes as $alquiler): ?>
-                        <td><?= Html::encode($alquiler->pelicula->codigo) ?></td>
-                        <td><?= Html::encode($alquiler->pelicula->titulo) ?></td>
-                        <td><?= Html::encode($alquiler->pelicula->titulo) ?></td>
-                        <td>
-                            <?= Html::beginForm(['alquileres/devolver']) ?>
-                                <?= Html::hiddenInput('alquiler', $alquiler->id) ?>
-                                <?= Html::submitButton('Devolver', ['class' => 'btn btn-xs btn-danger']) ?>
-                            <?= Html::endForm() ?>
-                        </td>
-                    <?php endforeach ?>
-                </tr>
+                <?php foreach ($alquileresPendientes as $alquiler): ?>
+                    <tr>
+                            <td><?= Html::encode($alquiler->pelicula->codigo) ?></td>
+                            <td><?= Html::encode($alquiler->pelicula->titulo) ?></td>
+                            <td>
+                                <?= Html::beginForm(['alquileres/devolver']) ?>
+                                    <?= Html::hiddenInput('alquiler', $alquiler->id) ?>
+                                    <?= Html::submitButton('Devolver', ['class' => 'btn btn-xs btn-danger']) ?>
+                                <?= Html::endForm() ?>
+                            </td>
+                    </tr>
+                <?php endforeach ?>
             </tbody>
 
         </table>
@@ -89,16 +88,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     'precio_alq',
                 ],
             ]) ?>
-            <?php $formAlquilar = ActiveForm::begin([
-                'action' => ['alquileres/alquilar']
-            ]); ?>
-                <?= Html::hiddenInput('codigo', $pelicula->codigo) ?>
-                <?= Html::hiddenInput('numero', $socio->numero) ?>
-                <div class="form-group">
-                    <?= Html::submitButton('Alquilar', ['class' => 'btn btn-success']) ?>
-                </div>
 
-            <?php ActiveForm::end(); ?>
+            <?php if (!$errorPelicula): ?>
+                <?php $formAlquilar = ActiveForm::begin([
+                    'action' => ['alquileres/alquilar']
+                ]); ?>
+                    <?= Html::hiddenInput('codigo', $pelicula->codigo) ?>
+                    <?= Html::hiddenInput('numero', $socio->numero) ?>
+                    <div class="form-group">
+                        <?= Html::submitButton('Alquilar', ['class' => 'btn btn-success']) ?>
+                    </div>
+
+                <?php ActiveForm::end(); ?>
+            <?php endif ?>
 
         <?php endif ?>
 
