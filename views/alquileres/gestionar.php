@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\DetailView;
@@ -28,6 +29,12 @@ $this->params['breadcrumbs'][] = 'Gestionar';
     <?php ActiveForm::end(); ?>
 
     <?php if (isset($socio)): ?>
+        <h3>
+            <?= Html::a(Html::encode($socio->nombre),
+                Url::to(['socios/view', 'id' => $socio->id]))
+            ?>
+        </h3>
+
         <?= DetailView::widget([
             'model' => $socio,
             'attributes' => [
@@ -51,7 +58,10 @@ $this->params['breadcrumbs'][] = 'Gestionar';
                 <?php foreach ($alquileresPendientes as $alquiler): ?>
                     <tr>
                             <td><?= Html::encode($alquiler->pelicula->codigo) ?></td>
-                            <td><?= Html::encode($alquiler->pelicula->titulo) ?></td>
+                            <td><?= Html::a(Html::encode($alquiler->pelicula->titulo),
+                                    Url::to(['peliculas/view', 'id' => $alquiler->pelicula->id]))
+                                ?>
+                            </td>
                             <td>
                                 <?= Html::beginForm(['alquileres/devolver']) ?>
                                     <?= Html::hiddenInput('alquiler', $alquiler->id) ?>

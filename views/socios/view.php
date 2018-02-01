@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -23,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('Gestionar', ['alquileres/gestionar', 'numero' => $model->numero], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= DetailView::widget([
@@ -51,8 +53,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php foreach ($alquileresSocio as $alquiler): ?>
                 <tr>
                     <td><?= Html::encode($alquiler->pelicula->codigo) ?></td>
-                    <td><?= Html::encode($alquiler->pelicula->titulo) ?></td>
-                    <td><?= Html::encode($alquiler->created_at) ?></td>
+                    <td><?= Html::a(Html::encode($alquiler->pelicula->titulo),
+                            Url::to(['peliculas/view', 'id' => $alquiler->pelicula->id]))
+                        ?>
+                    </td>
+                    <td><?= Yii::$app->formatter->asDateTime(Html::encode($alquiler->created_at), 'medium') ?></td>
                     <td>
                         <?php if ($alquiler->estaPendiente): ?>
                             <?= Html::beginForm(['alquileres/devolver']) ?>
@@ -60,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?= Html::submitButton('Devolver', ['class' => 'btn btn-xs btn-danger']) ?>
                             <?= Html::endForm() ?>
                         <?php else: ?>
-                            <?= Html::encode($alquiler->devolucion) ?>
+                            <?= Yii::$app->formatter->asDateTime(Html::encode($alquiler->devolucion)) ?>
                         <?php endif ?>
                     </td>
                 </tr>
