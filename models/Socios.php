@@ -51,6 +51,20 @@ class Socios extends \yii\db\ActiveRecord
     }
 
     /**
+     * Alquileres pendientes de un socio.
+     * @return
+     */
+    public function getAlquileresPendientes()
+    {
+        return Alquileres::find()
+                         ->with('pelicula')
+                         ->where(['devolucion' => null])
+                         ->andWhere(['socio_id' => $this->id])
+                         ->orderBy('created_at DESC')
+                         ->all();
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getAlquileres()

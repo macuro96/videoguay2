@@ -18,19 +18,19 @@ use yii\base\Model;
 class GestionarSocioForm extends Model
 {
     /**
-     * Almacena los socios si hay más de uno en la búsqueda
+     * Almacena los socios si hay más de uno en la búsqueda.
      * @var Socios[]
      */
     public $socios;
 
     /**
-     * Los numeros de cada socio separados por (, )
+     * Los numeros de cada socio separados por (, ).
      * @var string
      */
     public $numeros;
 
     /**
-     * Devuelve el array de socios de la búsqueda
+     * Devuelve el array de socios de la búsqueda.
      * @return Socios[]
      */
     public function getSocios()
@@ -61,22 +61,26 @@ class GestionarSocioForm extends Model
         return [
             [['numeros'], 'required'],
             [['numeros'], 'filter', 'filter' => function ($value) {
-                $value    = trim($value);
-                $aValues  = explode(', ', $value);
+                $value = trim($value);
+                $aValues = explode(', ', $value);
                 //$aValues  = array_map(mb_strlen($contenido), $aValues);
-                $aValues  = array_unique($aValues);
+                $aValues = array_unique($aValues);
                 $iNumeros = 0;
 
                 // Comprobar que son numeros
                 for ($n = 0; $n < count($aValues); $n++) {
-                    $iNumeros += (ctype_digit($aValues[$n]) ? 1 : 0);
-                }
+                    if (ctype_digit($aValues[$n])) {
+                        if ($n == 0) {
+                            $socios = Socios::find()->where(['numero' => $aValues[$n]]);
+                        }
 
-                if ($iNumeros == count($aValues)) {
-                    $socios = Socios::find()->where(['numero' => $aValues[0]]);
+                        $socios->orWhere(['numero' => $aValues[$n]]);
+                    } else {
+                        if ($n == 0) {
+                            $socios = Socios::find()->where(['like', 'lower(nombre)', mb_strtolower($aValues[$n])]);
+                        }
 
-                    for ($i = 1; $i < count($aValues); $i++) {
-                        $socios->orWhere(['numero' => $aValues[$i]]);
+                        $socios->orWhere(['nombre' => $aValues[$n]]);
                     }
 
                     $aSocios = $socios->all();
@@ -86,45 +90,16 @@ class GestionarSocioForm extends Model
                     } else {
                         $value = null;
                     }
+                    //$iNumeros += (ctype_digit($aValues[$n]) ? 1 : 0);
                 }
 
                 return $value;
             }],
             [['numeros'], function ($attribute, $params, $validator) {
                 if ($this->$attribute == null) {
-                    $this->addError($attribute, 'No existe ningun socio con esos números');
+                    $this->addError($attribute, 'No existe ningun socio con esa serie de identificador/es');
                 }
             }, 'skipOnEmpty' => false],
-            /*
-            [['numero'], 'required'],
-            [['numero'], 'filter', 'filter' => function ($value) {
-                if (!ctype_digit($value)) {
-                    $socios = Socios::find()
-                                   ->where(['like', 'lower(nombre)', mb_strtolower($value)])
-                                   ->all();
-
-                    if ($socios !== null) {
-                        $value = $socios;
-                    }
-                }
-
-                return $value;
-            }],
-            */
-            /*
-            [['numero'], 'filter', 'filter' => function ($value) {
-
-            }]
-            */
-            /*
-            [
-                ['numero'],
-                'exist',
-                'skipOnError' => true,
-                'targetClass' => Socios::className(),
-                'targetAttribute' => ['numero' => 'numero'],
-            ],
-            */
         ];
     }
 }

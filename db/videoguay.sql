@@ -49,7 +49,8 @@ CREATE INDEX idx_alquileres_created_at ON alquileres (created_at DESC);
 INSERT INTO socios (numero, nombre, direccion, telefono)
     VALUES (100, 'Pepe', 'Su casa', 956956956)
          , (200, 'Juan', 'Su hogar', 856856856)
-         , (300, 'María', 'Su calle', 756756756);
+         , (300, 'María', 'Su calle', 756756756)
+         , (400, 'Pepe', 'Su casa tambien', 956956956);
 
 INSERT INTO peliculas (codigo, titulo, precio_alq)
     VALUES (1000, 'Los últimos jedi', 5)

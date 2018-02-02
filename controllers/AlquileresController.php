@@ -150,6 +150,7 @@ class AlquileresController extends Controller
     public function actionAlquilar()
     {
         $numero = Yii::$app->request->post('numero');
+        $numeros = Yii::$app->request->post('numeros');
         $codigo = Yii::$app->request->post('codigo');
 
         if ($codigo === null) {
@@ -177,10 +178,10 @@ class AlquileresController extends Controller
             throw new NotFoundHttpException('Alquiler inválido');
         }
 
-        return $this->redirect(['gestionar', 'numero' => $numero]);
+        return $this->redirect(['gestionar', 'numero' => $numero, 'numeros' => $numeros]);
     }
 
-    public function actionGestionar($numeros = null, $codigo = null)
+    public function actionGestionar($numero = null, $numeros = null, $codigo = null)
     {
         $data = ['errorPelicula' => false];
 
@@ -191,41 +192,24 @@ class AlquileresController extends Controller
         ]);
 
         $gestionarPeliculaForm = new GestionarPeliculaForm([
+            'numero' => $numero,
             'codigo' => $codigo,
         ]);
 
         $data['gestionarSocioForm'] = $gestionarSocioForm;
         $data['gestionarPeliculaForm'] = $gestionarPeliculaForm;
 
-        /*
-        if ($numeros !== null) {
-            $gestionarSocioForm->validate();
-            var_dump($gestionarSocioForm->errors);
-            die();
-        }
-        */
-
         if ($numeros !== null && $gestionarSocioForm->validate()) {
-            var_dump($gestionarSocioForm->socios);
-            die();
-
-            $data['socio'] = Socios::findOne(['numero' => $numero]);
-
-            $alquileresPendientes = Alquileres::find()
-                                              ->with('pelicula')
-                                              ->where(['devolucion' => null])
-                                              ->andWhere(['socio_id' => $data['socio']->id])
-                                              ->orderBy('created_at DESC')
-                                              ->all();
-
-            $data['alquileresPendientes'] = $alquileresPendientes;
+            $socios = $gestionarSocioForm->socios;
+            $data['socios'] = $gestionarSocioForm->socios;
         }
 
-        if ($codigo !== null && $gestionarPeliculaForm->validate()) {
+        if ($numero !== null && $codigo !== null && $gestionarPeliculaForm->validate()) {
             $data['pelicula'] = Peliculas::findOne(['codigo' => $codigo]);
+            $socioAlquilar = Socios::findOne(['numero' => $numero]);
 
             $alquiler = new Alquileres([
-                'socio_id' => $data['socio']->id,
+                'socio_id' => $socioAlquilar->id,
                 'pelicula_id' => $data['pelicula']->id,
             ]);
 

@@ -17,6 +17,12 @@ class GestionarPeliculaForm extends Model
      */
     public $codigo;
 
+    /**
+     * El número de socio asociado a la búsqueda de la película.
+     * @var string
+     */
+    public $numero;
+
     public function formName()
     {
         return '';
@@ -38,8 +44,15 @@ class GestionarPeliculaForm extends Model
     public function rules()
     {
         return [
-            [['codigo'], 'required'],
-            [['codigo'], 'number'],
+            [['codigo', 'numero'], 'required'],
+            [['codigo', 'numero'], 'number'],
+            [
+                ['numero'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => Socios::className(),
+                'targetAttribute' => ['numero' => 'numero'],
+            ],
             [
                 ['codigo'],
                 'exist',
