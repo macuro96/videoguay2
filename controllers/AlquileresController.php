@@ -180,14 +180,14 @@ class AlquileresController extends Controller
         return $this->redirect(['gestionar', 'numero' => $numero]);
     }
 
-    public function actionGestionar($numero = null, $codigo = null)
+    public function actionGestionar($numeros = null, $codigo = null)
     {
         $data = ['errorPelicula' => false];
 
         $alquileresPendientes = null;
 
         $gestionarSocioForm = new GestionarSocioForm([
-            'numero' => $numero,
+            'numeros' => $numeros,
         ]);
 
         $gestionarPeliculaForm = new GestionarPeliculaForm([
@@ -197,7 +197,18 @@ class AlquileresController extends Controller
         $data['gestionarSocioForm'] = $gestionarSocioForm;
         $data['gestionarPeliculaForm'] = $gestionarPeliculaForm;
 
-        if ($numero !== null && $gestionarSocioForm->validate()) {
+        /*
+        if ($numeros !== null) {
+            $gestionarSocioForm->validate();
+            var_dump($gestionarSocioForm->errors);
+            die();
+        }
+        */
+
+        if ($numeros !== null && $gestionarSocioForm->validate()) {
+            var_dump($gestionarSocioForm->socios);
+            die();
+
             $data['socio'] = Socios::findOne(['numero' => $numero]);
 
             $alquileresPendientes = Alquileres::find()

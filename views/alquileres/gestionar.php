@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = 'Gestionar';
         'method' => 'get',
         'action' => ['alquileres/gestionar']
     ]); ?>
-        <?= $formSocio->field($gestionarSocioForm, 'numero')->textInput() ?>
+        <?= $formSocio->field($gestionarSocioForm, 'numeros')->textInput() ?>
 
         <div class="form-group">
             <?= Html::submitButton('Buscar', ['class' => 'btn btn-success']) ?>
