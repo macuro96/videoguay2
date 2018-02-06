@@ -37,6 +37,7 @@ class AlquileresController extends Controller
      * Lists all Alquileres models.
      * @return mixed
      */
+    /*
     public function actionIndex()
     {
         $searchModel = new AlquileresSearch();
@@ -47,6 +48,24 @@ class AlquileresController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    */
+
+    /**
+     * Lists all Alquileres models.
+     * @return mixed
+     */
+    public function actionIndex()
+    {
+        $alquileresSearch = new AlquileresSearch();
+        $dataProvider = $alquileresSearch->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $alquileresSearch,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+
 
     /**
      * Displays a single Alquileres model.

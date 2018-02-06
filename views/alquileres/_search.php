@@ -15,11 +15,13 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?= $form->field($model, 'socio.numero') ?>
 
-    <?= $form->field($model, 'socio_id') ?>
+    <?= $form->field($model, 'socio.nombre') ?>
 
-    <?= $form->field($model, 'pelicula_id') ?>
+    <?= $form->field($model, 'pelicula.codigo') ?>
+
+    <?= $form->field($model, 'pelicula.titulo') ?>
 
     <?= $form->field($model, 'created_at') ?>
 
