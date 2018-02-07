@@ -10,7 +10,7 @@ $config = [
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'language' => 'es-ES',
     'components' => [
@@ -61,6 +61,17 @@ $config = [
         */
     ],
     'params' => $params,
+    'modules' => [
+        'datecontrol' => [
+            'class' => '\kartik\datecontrol\Module',
+            // format settings for displaying each date attribute (ICU format example)
+            'displaySettings' => [
+               \kartik\datecontrol\Module::FORMAT_DATE => 'php:d-m-Y',
+               \kartik\datecontrol\Module::FORMAT_TIME => 'php:H:i:s',
+               \kartik\datecontrol\Module::FORMAT_DATETIME => 'php:d-m-Y H:i:s',
+            ],
+        ],
+    ],
 ];
 
 if (YII_ENV_DEV) {
