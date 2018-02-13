@@ -2,6 +2,19 @@
 -- Archivo de base de datos --
 ------------------------------
 
+DROP TABLE IF EXISTS usuarios CASCADE;
+
+CREATE TABLE usuarios
+(
+    id        bigserial    PRIMARY KEY
+  , nombre    varchar(255) NOT NULL UNIQUE
+  , password  varchar(255) NOT NULL
+  , email     varchar(255)
+  , auth_key  varchar(255)
+);
+
+CREATE INDEX idx_usuarios_nombre ON usuarios (nombre);
+
 DROP TABLE IF EXISTS socios CASCADE;
 
 CREATE TABLE socios
@@ -46,6 +59,10 @@ CREATE TABLE alquileres
 CREATE INDEX idx_alquileres_pelicula_id ON alquileres (pelicula_id);
 CREATE INDEX idx_alquileres_created_at ON alquileres (created_at DESC);
 
+INSERT INTO usuarios (nombre, password, email)
+ VALUES ('pepe', crypt('pepe', gen_salt('bf', 13)), 'pepe@pepe.com')
+, ('juan', crypt('juan', gen_salt('bf', 13)), 'juan@juan.com');
+
 INSERT INTO socios (numero, nombre, direccion, telefono)
     VALUES (100, 'Pepe', 'Su casa', 956956956)
          , (200, 'Juan', 'Su hogar', 856856856)
@@ -61,4 +78,4 @@ INSERT INTO alquileres (socio_id, pelicula_id, created_at, devolucion)
     VALUES (1, 1, current_timestamp - 'P4D'::interval, current_timestamp - 'P3D'::interval)
          , (1, 2, current_timestamp - 'P2D'::interval, null)
          , (1, 3, current_timestamp - 'P1D'::interval, current_timestamp)
-, (3, 1, current_timestamp - 'P3D'::interval, current_timestamp - 'P1D'::interval);
+         , (3, 1, current_timestamp - 'P3D'::interval, current_timestamp - 'P1D'::interval);

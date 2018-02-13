@@ -14,15 +14,18 @@ $config = [
     ],
     'language' => 'es-ES',
     'components' => [
+        'formatter' => [
+            'timeZone' => 'Europe/Madrid',
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'roZkYyudqJDptRlylOE9tMZ1429kYcOX',
+            'cookieValidationKey' => '8yvc-EFK2fo83C3EoFV2EhGeSs-MkV7Y',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'app\models\Usuarios',
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
@@ -48,9 +51,6 @@ $config = [
         ],
         'log' => $log,
         'db' => $db,
-        'formatter' => [
-            'timeZone' => 'Europe/Madrid',
-        ],
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,
